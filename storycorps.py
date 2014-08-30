@@ -53,8 +53,9 @@ def get_listen_item(d):
         '@type': 'RadioClip',
         '@id': d['url'],
         'name': d['title'],
-        'description': d['excerpt'],
-        'contributor': []
+        'description': d['excerpt'].split('...', 1)[0],
+        'contributor': [],
+        'contentLocation': []
     }
 
     # get the mp3
@@ -62,8 +63,27 @@ def get_listen_item(d):
     i['audio'] = m.group(1)
 
     # get the thumbnail
-    m = re.search('(http://.+?\.jpg)', d['shortcode'])
+    m = re.search('(http://[^"]+?\.jpg)', d['shortcode'])
     i['image'] = m.group(1)
+
+    # contributors
+    if 'facilitator' in d:
+        i['contributor'].append(d['facilitator'])
+    if 'producer' in d:
+        i['contributor'].append(d['producer'])
+
+    # org
+    if 'partnership' in d:
+        i['sourceOrganization'] = d['partnership']
+
+    # locations
+    if 'location' in d:
+        for m in re.finditer(r'<a href="(.+?)">(.+?)</a>', d['location']):
+            i['contentLocation'].append({
+                '@type': 'Place',
+                '@id': m.group(1),
+                'name': m.group(2)
+            })
 
     # get the topics
     i['about'] = []
@@ -74,7 +94,12 @@ def get_listen_item(d):
             "@id": "http://storycorps.org/themes/" + slug,
             "name": t
         })
-    
+  
+    # remove empty lists
+    for k, v in i.items():
+        if not v:
+            i.pop(k)
+
     print i['@id']
     return i
 
@@ -96,17 +121,22 @@ def get_diy_item(url):
     i = {
         '@type': 'RadioClip', 
         '@id': url, 
-        'contentLocation': [], 
         'about': []
     }
     time.sleep(1)
     html = requests.get(url).content
     doc = bs4.BeautifulSoup(html)
     post = doc.select('div[class="post"]')[0]
-    i['audio'] = get_soundcloud_url(post.select('iframe')[0]['src'])
+    audio_url, creator = get_soundcloud_info(post.select('iframe')[0]['src'])
+    if audio_url:
+        i['audio'] = audio_url
+    if creator:
+        i['creator'] = creator
     i['name'] = post.select('h2')[0].text
     for a in post.select('div[class="single_text"] p a'):
         if '/locations/' in a['href']:
+            if 'contentLocation' not in i:
+                i['contentLocation'] = []
             i['contentLocation'].append({
                 '@type': 'Place', 
                 'url': a['href'], 
@@ -135,13 +165,13 @@ def get_diy_item(url):
     print i['@id']
     return i
 
-def get_soundcloud_url(iframe_url):
+def get_soundcloud_info(iframe_url):
     track_id = re.search(r'%2F(\d+)&', iframe_url).group(1)
     try:
         track = soundcloud_client.get('/tracks/' + track_id)
-        return track.permalink_url
+        return track.permalink_url, track.user.username
     except:
-        return None
+        return None, None
 
 if __name__ == "__main__":
     main()
