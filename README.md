@@ -56,14 +56,14 @@ Here's an example of the json-ld for an interview:
 
 ## Run
 
-    brew install pyenv-virtualenvwrapper
-    mkvirtualenv storycorps-meta
-    git clone http://github.com/edsu/storycorps-meta
-    cd storycorps-meta
-    pip install -r requirements.txt
-    cp config.py.template config.py # and add soundcloud credentials
-    ./storycorps.py
-    cat storycorps.json
+    % brew install pyenv-virtualenvwrapper
+    % mkvirtualenv storycorps-meta
+    % git clone http://github.com/edsu/storycorps-meta
+    % cd storycorps-meta
+    % pip install -r requirements.txt
+    % cp config.py.template config.py # and add soundcloud credentials
+    % ./storycorps.py
+    % cat storycorps.json
 
 ## License
 
