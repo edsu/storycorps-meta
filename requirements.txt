@@ -1,0 +1,3 @@
+requests
+soundcloud
+beautifulsoup4
