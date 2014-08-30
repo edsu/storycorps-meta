@@ -16,7 +16,7 @@ hosts audio on [SoundCloud](http://soundcloud.com).
 
 Here's an example of the json-ld for an interview:
 
-```javascript
+```json
     {
       "@id": "http://storycorps.org/listen/alton-yates-and-toni-yates/", 
       "@type": "RadioClip", 
@@ -50,7 +50,7 @@ Here's an example of the json-ld for an interview:
           "@type": "Thing", 
           "name": "Work"
         }
-      ], 
+      ]
     } 
 ```
 
