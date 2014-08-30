@@ -137,8 +137,11 @@ def get_diy_item(url):
 
 def get_soundcloud_url(iframe_url):
     track_id = re.search(r'%2F(\d+)&', iframe_url).group(1)
-    track = soundcloud_client.get('/tracks/' + track_id)
-    return track.permalink_url
+    try:
+        track = soundcloud_client.get('/tracks/' + track_id)
+        return track.permalink_url
+    except:
+        return None
 
 if __name__ == "__main__":
     main()
