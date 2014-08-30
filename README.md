@@ -20,7 +20,7 @@ Here's an example of the json-ld for an interview:
     {
       "@id": "http://storycorps.org/listen/alton-yates-and-toni-yates/", 
       "@type": "RadioClip", 
-      "name": "Alton Yates and Toni Yates"
+      "name": "Alton Yates and Toni Yates",
       "description": "Alton Yates tells his daughter, Toni, about being part of a small group of Air...",
       "audio": "http://cdn.storycorps.org/wordpress/wp-content/uploads/yatesweb.mp3", 
       "image": "http://cdn.storycorps.org/wordpress/wp-content/uploads/yatesa3.jpg", 
