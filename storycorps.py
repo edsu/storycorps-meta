@@ -60,11 +60,13 @@ def get_listen_item(d):
 
     # get the mp3
     m = re.search('(http://.+?\.mp3)', d['shortcode'])
-    i['audio'] = m.group(1)
+    if m:
+        i['audio'] = m.group(1)
 
     # get the thumbnail
     m = re.search('(http://[^"]+?\.jpg)', d['shortcode'])
-    i['image'] = m.group(1)
+    if m:
+        i['image'] = m.group(1)
 
     # contributors
     if 'facilitator' in d:
